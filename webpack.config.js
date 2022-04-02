@@ -12,7 +12,6 @@ const proxy = {};
 
 for (const project of projects) {
   const projectPath = path.join(root, project);
-
   entries[project] = projectPath;
   htmlPlugins.push(
     new HtmlPlugin({
@@ -52,8 +51,7 @@ module.exports = {
         options: { cacheDirectory: true },
       },
       {
-        test: /\.html/,
-        include: [path.resolve(__dirname, 'projects')],
+        test: /projects\/.+\.html/,
         use: [
           { loader: './scripts/html-inject-loader.js' },
           {
