@@ -16,7 +16,20 @@
    isAllTrue([1, 2, 3, 4, 5], n => n < 10) // вернет true
    isAllTrue([100, 2, 3, 4, 5], n => n < 10) // вернет false
  */
-function isAllTrue(array, fn) {}
+function isAllTrue(array, fn) {
+  if (!Array.isArray(array) || !array.length) {
+    throw new Error('empty array');
+  }
+  if (typeof fn !== 'function') {
+    throw new Error('fn is not a function');
+  }
+  for (let i = 0; i < array.length; i++) {
+    if (!fn(array[i])) {
+      return false;
+    }
+  }
+  return true;
+}
 
 /*
  Задание 2:
@@ -34,7 +47,20 @@ function isAllTrue(array, fn) {}
    isSomeTrue([1, 2, 30, 4, 5], n => n > 20) // вернет true
    isSomeTrue([1, 2, 3, 4, 5], n => n > 20) // вернет false
  */
-function isSomeTrue(array, fn) {}
+function isSomeTrue(array, fn) {
+  if (!Array.isArray(array) || !array.length) {
+    throw new Error('empty array');
+  }
+  if (typeof fn !== 'function') {
+    throw new Error('fn is not a function');
+  }
+  for (let i = 0; i < array.length; i++) {
+    if (fn(array[i])) {
+      return true;
+    }
+  }
+  return false;
+}
 
 /*
  Задание 3:
@@ -47,8 +73,20 @@ function isSomeTrue(array, fn) {}
  3.3: Необходимо выбрасывать исключение в случаях:
    - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn, ...args) {}
-
+function returnBadArguments(fn, ...args) {
+  if (typeof fn !== 'function') {
+    throw new Error('fn is not a function');
+  }
+  const newArray = [];
+  for (const arg of args) {
+    try {
+      fn(arg);
+    } catch (e) {
+      newArray.push(arg);
+    }
+  }
+  return newArray;
+}
 /*
  Задание 4:
 
@@ -66,7 +104,51 @@ function returnBadArguments(fn, ...args) {}
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator(number = 0) {}
+function calculator(number = 0) {
+  if (typeof number !== 'number') {
+    throw new Error('number is not a number');
+  }
+  function newCalculate(number) {
+    this.sum = (...args) => {
+      let sumOfNumbers = number;
+      for (const arg of args) {
+        sumOfNumbers += arg;
+      }
+      return sumOfNumbers;
+    };
+    this.dif = (...args) => {
+      let difOfNumbers = number;
+      for (const arg of args) {
+        difOfNumbers -= arg;
+      }
+      return difOfNumbers;
+    };
+    this.div = (...args) => {
+      let divOfNumbers = number;
+      for (const arg of args) {
+        if (arg === 0) {
+          throw new Error('division by 0');
+        }
+        divOfNumbers = divOfNumbers / arg;
+      }
+      return divOfNumbers;
+    };
+    this.mul = (...args) => {
+      let mulOfNumbers = number;
+      for (const arg of args) {
+        mulOfNumbers *= arg;
+      }
+      return mulOfNumbers;
+    };
+  }
+  return new newCalculate(number);
+}
+const calculatorByZero = calculator(100);
+console.log(calculatorByZero);
+console.log(calculatorByZero.sum(2, 5, 8));
+console.log(calculatorByZero.dif(2, 5, 8));
+console.log(calculatorByZero.div(2, 5, 10));
+console.log(calculatorByZero.mul(2, 5, 10));
 
 /* При решении задач, постарайтесь использовать отладчик */
 
