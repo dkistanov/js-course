@@ -10,7 +10,11 @@
  Пример:
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
-function createDivWithText(text) {}
+function createDivWithText(text) {
+  const newDiv = document.createElement('div');
+  newDiv.textContent = text;
+  return newDiv;
+}
 
 /*
  Задание 2:
@@ -20,7 +24,9 @@ function createDivWithText(text) {}
  Пример:
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
-function prepend(what, where) {}
+function prepend(what, where) {
+  where.prepend(what);
+}
 
 /*
  Задание 3:
@@ -41,7 +47,15 @@ function prepend(what, where) {}
 
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
-function findAllPSiblings(where) {}
+function findAllPSiblings(where) {
+  const arraySiblings = [];
+  for (const elem of where.children) {
+    if (elem.nextElementSibling && elem.nextElementSibling.tagName === 'P') {
+      arraySiblings.push(elem);
+    }
+  }
+  return arraySiblings;
+}
 
 /*
  Задание 4:
@@ -64,12 +78,13 @@ function findError(where) {
   const result = [];
 
   for (const child of where.childNodes) {
-    result.push(child.textContent);
+    if (child.nodeType === 1) {
+      result.push(child.textContent);
+    }
   }
 
   return result;
 }
-
 /*
  Задание 5:
 
@@ -82,7 +97,13 @@ function findError(where) {
    После выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
    должно быть преобразовано в <div></div><p></p>
  */
-function deleteTextNodes(where) {}
+function deleteTextNodes(where) {
+  for (const child of where.childNodes) {
+    if (child.nodeType === 3) {
+      where.removeChild(child);
+    }
+  }
+}
 
 /*
  Задание 6:
@@ -95,8 +116,16 @@ function deleteTextNodes(where) {}
    После выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
-function deleteTextNodesRecursive(where) {}
-
+function deleteTextNodesRecursive(where) {
+  for (const child of where.childNodes) {
+    if (child.nodeType === 3) {
+      where.removeChild(child);
+    }
+  }
+  for (const child of where.children) {
+    deleteTextNodesRecursive(child);
+  }
+}
 /*
  Задание 7 *:
 
@@ -117,8 +146,41 @@ function deleteTextNodesRecursive(where) {}
      texts: 3
    }
  */
-function collectDOMStat(root) {}
+function collectDOMStat(root) {
+  const objectStats = {
+    tags: {},
+    classes: {},
+    texts: 0,
+  };
 
+  function scan(root) {
+    const childNodesArray = Array.from(root.childNodes);
+    childNodesArray.forEach((child) => {
+      if (child.nodeType === 3) {
+        ++objectStats.texts;
+        return;
+      }
+      for (const childClass of child.classList) {
+        if (objectStats.classes[childClass] !== undefined) {
+          ++objectStats.classes[childClass];
+        } else {
+          objectStats.classes[childClass] = 1;
+        }
+      }
+      const childTag = child.tagName;
+      if (objectStats.tags[childTag] !== undefined) {
+        ++objectStats.tags[childTag];
+      } else {
+        objectStats.tags[childTag] = 1;
+      }
+      if (child.childNodes.length) {
+        scan(child);
+      }
+    });
+  }
+  scan(root);
+  return objectStats;
+}
 /*
  Задание 8 *:
 
@@ -151,7 +213,23 @@ function collectDOMStat(root) {}
      nodes: [div]
    }
  */
-function observeChildNodes(where, fn) {}
+function observeChildNodes(where, fn) {
+  const observer = new MutationObserver((mutation) => {
+    mutation.forEach(function (elem) {
+      if (elem.type === 'childList') {
+        fn({
+          type: elem.addedNodes.length ? 'insert' : 'remove',
+          nodes: [...(elem.addedNodes.length ? elem.addedNodes : elem.removedNodes)],
+        });
+      }
+    });
+  });
+  // наблюдать за всем, кроме атрибутов
+  observer.observe(where, {
+    childList: true, // наблюдать за непосредственными детьми
+    subtree: true, // и более глубокими потомками
+  });
+}
 
 export {
   createDivWithText,
