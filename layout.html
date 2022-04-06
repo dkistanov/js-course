@@ -15,13 +15,17 @@
     </style>
   </head>
   <body>
-    <div class="some">FSF<b class="on-b">fsf</b> <b>fasf</b></div>
-    <p class="some some-1">
-      DFS<b><i></i></b>
-    </p>
-    <a>SR</a>
-    <span class="some some-1 some-2">CC</span>
-    <p>WW</p>
-    CSOA
+    <div id="app">
+      <div id="loading-block">Загрузка...</div>
+      <div id="loading-failed">
+        <div>Не удалось загрузить города</div>
+        <button id="retry-button">Повторить</button>
+      </div>
+      <div id="filter-block">
+        <input id="filter-input" placeholder="название города" type="text" />
+
+        <div id="filter-result"></div>
+      </div>
+    </div>
   </body>
 </html>
