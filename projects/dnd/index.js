@@ -19,9 +19,46 @@ import './dnd.html';
 
 const homeworkContainer = document.querySelector('#app');
 
-document.addEventListener('mousemove', (e) => {});
+let cursorElemX = 0;
+let cursorElemY = 0;
+let currentDraggle = null;
 
-export function createDiv() {}
+document.addEventListener('mousemove', (e) => {
+  if (!currentDraggle || currentDraggle.tagName !== 'DIV') {
+    return;
+  }
+  currentDraggle.style.left = e.clientX - cursorElemX + 'px';
+  currentDraggle.style.top = e.clientY - cursorElemY + 'px';
+});
+
+function random(from, to) {
+  return Math.round(Math.random() * (to - from));
+}
+function randomSize(from, to) {
+  const width = random(from, to) + 'px';
+  const height = random(from, to) + 'px';
+  return `width: ${width};height: ${height};`;
+}
+function randomPosition() {
+  return `position:absolute; left: ${random(0, 100)}%;top:${random(0, 100)}%;`;
+}
+function randomColor() {
+  return 'background-color: #' + Math.floor(Math.random() * 16777215).toString(16) + ';';
+}
+
+export function createDiv() {
+  const newDiv = document.createElement('div');
+  newDiv.style.cssText = randomSize(0, 200) + randomPosition() + randomColor();
+  newDiv.addEventListener('mousedown', (e) => {
+    currentDraggle = e.target;
+    cursorElemX = e.clientX - e.target.getBoundingClientRect().x;
+    cursorElemY = e.clientY - e.target.getBoundingClientRect().y;
+  });
+  newDiv.addEventListener('mouseup', (e) => {
+    currentDraggle = null;
+  });
+  return newDiv;
+}
 
 const addDivButton = homeworkContainer.querySelector('#addDiv');
 
