@@ -12,7 +12,82 @@
       .hidden {
         display: none !important;
       }
+      #map {
+        height: 100vh;
+      }
+
+      #map .ymaps-2-1-79-balloon__close + .ymaps-2-1-79-balloon__content {
+        margin-right: 0;
+        padding: 29px 26px 20px 17px;
+      }
+
+      .balloon__title {
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 18px;
+
+        color: #000000;
+        margin-bottom: 20px;
+      }
+      .balloon__wrapper form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .balloon__wrapper input,
+      .balloon__wrapper textarea {
+        padding: 11px;
+        background: #ffffff;
+        border: 1px solid #cfcfcf;
+        box-sizing: border-box;
+        border-radius: 3px;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
+        /* identical to box height */
+
+        color: #000000;
+        margin-bottom: 10px;
+      }
+
+      .balloon__wrapper input:focus,
+      .balloon__wrapper textarea:focus {
+        border-color: #1371c8;
+      }
+
+      .balloon__wrapper input:focus-visible,
+      .balloon__wrapper textarea:focus-visible {
+        outline: none;
+      }
+
+      .balloon__wrapper textarea {
+        min-height: 100px;
+        resize: none;
+        margin-bottom: 20px;
+      }
+
+      .balloon__wrapper button {
+        padding: 9px 16px;
+        background: #ff8663;
+        border-radius: 3px;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 16px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        color: #ffffff;
+        border: none;
+        font-family: Arial;
+      }
     </style>
   </head>
-  <body></body>
+  <body>
+    <div id="map"></div>
+    <script
+      src="https://api-maps.yandex.ru/2.1/?apikey=e62cb2a7-6272-40cf-abb6-4180b198068a&lang=ru_RU"
+      type="text/javascript"
+    ></script>
+  </body>
 </html>
